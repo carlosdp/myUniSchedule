@@ -1,6 +1,8 @@
 Myunischedule::Application.routes.draw do
   get "o_auth/redirect"
   post "o_auth/redirect"
+  
+  get "o_auth/logout"
 
   resources :schedules
   

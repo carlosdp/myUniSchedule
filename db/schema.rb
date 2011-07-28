@@ -10,10 +10,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110728012721) do
+ActiveRecord::Schema.define(:version => 20110728042707) do
 
   create_table "schedules", :force => true do |t|
     t.string   "vcal"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+  end
+
+  create_table "users", :force => true do |t|
+    t.integer  "fbid"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

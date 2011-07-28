@@ -1,9 +1,17 @@
-<h1>Listing schedules</h1>
-<% if !@graph %>
+<div id="uni-error"><%= flash[:error]%></div>
+<div id="uni-success"><%= flash[:success]%></div>
+
+<% if !@user %>
 <%= link_to 'Login via Facebook', @oauth.url_for_oauth_code %>
 <% else %>
-<%= @graph.get_object('me') %>
+<%= link_to 'Logout', {:controller => 'o_auth', :action => 'logout'} %>
+<%= @user %>
 <% end %>
+
+<% if session[:user_id] %>
+You're good
+<% end %>
+
 <table>
   <tr>
     <th>Vcal</th>
