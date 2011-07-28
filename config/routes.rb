@@ -1,4 +1,11 @@
 Myunischedule::Application.routes.draw do
+  get "o_auth/redirect"
+  post "o_auth/redirect"
+
+  resources :schedules
+  
+  root :to => 'schedules#index'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

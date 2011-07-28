@@ -8,6 +8,8 @@ gem 'rails', '3.0.9'
 gem 'sqlite3'
 gem 'mogli'
 gem 'vpim'
+gem 'ruby-hmac', :require => 'hmac-sha1'
+gem 'koala'
 
 # Use unicorn as the web server
 # gem 'unicorn'
