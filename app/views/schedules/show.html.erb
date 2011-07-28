@@ -1,10 +1,16 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Vcal:</b>
-  <%= @schedule.vcal %>
-</p>
+<table>
+	<tr>
+		<td>Course</td>
+		<td>Days</td>
+	</tr>
+	<% @courses.each do |c| %>
+	<tr>
+		<td><%= c.name %></td>
+		<td><%= c.weekdays %></td>
+	</tr>
+	<% end %>
+</table>
 
-
-<%= link_to 'Edit', edit_schedule_path(@schedule) %> |
-<%= link_to 'Back', schedules_path %>
+<%= link_to 'Back', root_path %>

@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  description: MyString
+  weekdays: MyString
+  start: 2011-07-28 11:47:37
+  end: 2011-07-28 11:47:37
+
+two:
+  name: MyString
+  description: MyString
+  weekdays: MyString
+  start: 2011-07-28 11:47:37
+  end: 2011-07-28 11:47:37

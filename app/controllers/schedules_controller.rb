@@ -1,21 +1,29 @@
 class SchedulesController < ApplicationController
+  require 'rubygems'
+  require 'icalendar'
+  include Icalendar
   
   def is_logged_in_fb?
     
-    redirect_to :action => 'index' if !session[:access_token]
+    redirect_to :action => 'index' if !session[:access_token] || !session[:user_id] || !User.exists?(:id => session[:user_id])
     
   end
   
   # GET /schedules
   # GET /schedules.xml
   def index
+    graph = 0
+    begin
+      graph = Koala::Facebook::GraphAPI.new(session[:access_token])
+      @user = graph.get_object('me') if session[:access_token]
+    rescue
+      session[:access_token] = nil
+    end
     
     if session[:access_token]
-      graph = Koala::Facebook::GraphAPI.new(session[:access_token])
-      
-      @user = graph.get_object('me')
-      
       validUser = false
+      
+      if !session[:user_id]
       
       if !User.exists?(:fbid => @user["id"])
         
@@ -24,7 +32,7 @@ class SchedulesController < ApplicationController
           if e["type"] == "College" && e["school"]["name"] == "Carnegie Mellon University"
             
             validUser = true
-            cuser = User.create({:fbid => @user["id"]})
+            cuser = User.create({:fbid => @user["id"], :name => @user["name"], :link => @user["link"]})
             session[:user_id] = cuser[:id]
             flash[:success] = "Congratulations! You are now linked to myUniSchedule. Follow the instructions to post your schedule!"
             
@@ -49,6 +57,38 @@ class SchedulesController < ApplicationController
         session[:user_id] = vuser[:id]
         
       end
+      else
+        
+        if !User.exists?({:id => session[:user_id], :fbid => @user["id"]})
+          
+          session[:access_token] = nil
+          session[:user_id] = nil
+          @user = nil
+          
+        end
+        
+      end
+      
+    end
+    
+    if session[:user_id]
+      
+      luser = User.find_by_id(session[:user_id])
+      schedu = luser.schedule
+      if schedu
+        @students = Hash.new
+        @usermax = 0
+        @courses = schedu.courses
+        @courses.each do |c|
+          tsch = Course.find_by_id(c.id).schedules
+          @students[c.name] = []
+          tsch.each do |u|
+            @students[c.name] << u.user
+          end
+          @usermax = @students[c.name].count if @students[c.name].count > @usermax
+        
+        end
+      end
       
     end
     
@@ -67,6 +107,8 @@ class SchedulesController < ApplicationController
   def show
     is_logged_in_fb?
     @schedule = Schedule.find(params[:id])
+    
+    @courses = @schedule.courses
 
     respond_to do |format|
       format.html # show.html.erb
@@ -96,10 +138,30 @@ class SchedulesController < ApplicationController
   # POST /schedules.xml
   def create
     is_logged_in_fb?
+    success = true
+    
+    courselist = parseSchedule(params[:schedule]["vcal"])
+    
     @schedule = Schedule.new(params[:schedule])
+    @schedule.user = User.find(:first, :conditions => {:id => session[:user_id]})
+    @schedule.save!
+    
+    courselist.each do |c|
+      
+      if !Course.exists?(:name => c[:name])
+        
+        @schedule.courses.create(c)
+        
+      else
+        
+        @schedule.courses << Course.find(:first, :conditions => {:name => c[:name]})
+        
+      end
+      
+    end
 
     respond_to do |format|
-      if @schedule.save
+      if success 
         format.html { redirect_to(@schedule, :notice => 'Schedule was successfully created.') }
         format.xml  { render :xml => @schedule, :status => :created, :location => @schedule }
       else
@@ -138,4 +200,41 @@ class SchedulesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  private
+  
+  def parseSchedule(file)
+    
+    sch = Icalendar.parse(File.new(Rails.root.to_s + "/F11_schedule.ics", 'r'))
+    classes = Hash.new
+    courses = []
+
+    return false if sch.count > 1
+
+    sch.first.events.each do |e|
+
+      weekdys = []
+
+      if !classes[e.summary]
+        classes[e.summary] = true
+        e.recurrence_rules.each do |r|
+
+          weekdy = r.parse_weekday_list("BYDAY", r.orig_value)
+          weekdy.each do |w|
+
+            weekdys << w.to_s.sub(",","")
+
+          end
+
+        end
+
+        courses << {:name => e.summary, :description => e.description, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend}
+
+      end
+
+    end
+    
+    return courses
+  end
+  
 end
