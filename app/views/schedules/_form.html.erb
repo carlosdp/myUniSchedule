@@ -1,21 +1,10 @@
-<%= form_for(@schedule) do |f| %>
-  <% if @schedule.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@schedule.errors.count, "error") %> prohibited this schedule from being saved:</h2>
-
-      <ul>
-      <% @schedule.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+<%= form_tag '/schedules', :multipart => true do %>
+	<div id="error"><%= flash[:error] %> </div>
   <div class="field">
-    <%= f.label :vcal %><br />
-    <%= f.text_field :vcal %>
+    iCal File:<br />
+    <%= file_field :schedule, :vcal  %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= submit_tag 'Submit' %>
   </div>
 <% end %>

@@ -74,11 +74,11 @@ class SchedulesController < ApplicationController
     if session[:user_id]
       
       luser = User.find_by_id(session[:user_id])
-      schedu = luser.schedule
-      if schedu
+      @schedu = luser.schedule
+      if @schedu
         @students = Hash.new
         @usermax = 0
-        @courses = schedu.courses
+        @courses = @schedu.courses
         @courses.each do |c|
           tsch = Course.find_by_id(c.id).schedules
           @students[c.name] = []
@@ -140,9 +140,10 @@ class SchedulesController < ApplicationController
     is_logged_in_fb?
     success = true
     
-    courselist = parseSchedule(params[:schedule]["vcal"])
+    courselist = parseSchedule(params[:schedule])
     
-    @schedule = Schedule.new(params[:schedule])
+    if courselist
+    @schedule = Schedule.new({:vcal => params[:schedule][:vcal].original_filename})
     @schedule.user = User.find(:first, :conditions => {:id => session[:user_id]})
     @schedule.save!
     
@@ -157,6 +158,12 @@ class SchedulesController < ApplicationController
         @schedule.courses << Course.find(:first, :conditions => {:name => c[:name]})
         
       end
+      
+    end
+    else
+      
+      success = false 
+      flash[:error] = "Invalid iCal file!"
       
     end
 
@@ -204,8 +211,11 @@ class SchedulesController < ApplicationController
   private
   
   def parseSchedule(file)
-    
-    sch = Icalendar.parse(File.new(Rails.root.to_s + "/F11_schedule.ics", 'r'))
+    begin
+    sch = Icalendar.parse(File.new(file[:vcal].tempfile, 'r'))
+    rescue
+      return false
+    end
     classes = Hash.new
     courses = []
 
