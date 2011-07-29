@@ -1,17 +1,10 @@
+<%= render :partial => 'topbar' %>
 <div id="content">
 <div id="uni-error"><%= flash[:error]%></div>
 <div id="uni-success"><%= flash[:success]%></div>
 
-<% if !@user %>
-<%= link_to 'Login via Facebook', @oauth.url_for_oauth_code %>
-<% else %>
-<%= link_to 'Logout', {:controller => 'o_auth', :action => 'logout'} %>
-<%= @user %>
-<% end %>
-
-
 <% if @courses %>
-
+	<div id="maintext">Below is your schedule of classes with the names and facebook links to all of the students in those classes that have uploaded their schedules. Once more students in your classes upload their schedules, they will appear on this page. Make sure to check back every once in a while for new additions! (If you are from another school but are interested in using this site for your school, follow me on twitter below and send me a message. I will post updates on there.)</div></br>
 	<table>
 		<tr>
 		<% @courses.each do |c| %>
@@ -32,11 +25,22 @@
 		</tr>
 		<% end %>
 	</table>
+	</br>
 	<div id="schops">
 	    <td><%= link_to 'View my Schedule', @schedu %></td>
 	    <td><%= link_to 'Delete my Schedule', @schedu, :confirm => 'Are you sure?', :method => :delete %></td>
 	</div>
 <% else %>
-<%= link_to 'Upload my Schedule', new_schedule_path %>
+<% if @user %>
+<div id="maintext">You are ready to upload your schedule! Go to SIO -> Course Schedule -> Semester Schedule <span style="color:red">(MAKE SURE YOU USE THE "SEMESTER SCHEDULE" NOT THE "PLAN COURSE SCHEDULE" ! If you make this mistake, simply delete your schedule on this site and re-upload.)</span>, and click "Calendar Export". It will give you an iCal file which you can import into iCal or any other calendar software that supports the vCalendar format (ie. Google Calendars). Upload this file by clicking the link below and you will be able to see who else is in your classes!</div>
+</br>
+<div style="align:center"><%= link_to 'Upload my Schedule', new_schedule_path %></div>
+<% else %>
+
+<div id="maintext">Welcome to myUniSchedule! This site allows students (currently only CMU students) to upload their class schedules and link with others that are in their classes! Click the facebook button above to login with your facebook. You must have Carnegie Mellon University in you education in order to register at this time due to the way we parse schedules. The site is not the prettiest at the moment and may have bugs. If you have any errors or gltiches (or suggestions), email me at hmind2005@gmail.com or follow me on twitter below.</div>
+
 <% end %>
+<% end %>
+<div id="footer"><a href="http://twitter.com/cdiazpadron" class="twitter-follow-button" data-button="grey" data-text-color="#FFFFFF" data-link-color="#00AEFF">Follow @cdiazpadron</a>
+<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script></div>
 </div>

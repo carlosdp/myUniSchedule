@@ -1,9 +1,11 @@
-<p id="notice"><%= notice %></p>
+<div id="content">
+<p id="uni-success"><%= flash[:notice] %></p>
 
+<% if @courses %>
 <table>
 	<tr>
-		<td>Course</td>
-		<td>Days</td>
+		<th>Course</th>
+		<th>Days</th>
 	</tr>
 	<% @courses.each do |c| %>
 	<tr>
@@ -13,4 +15,7 @@
 	<% end %>
 </table>
 
-<%= link_to 'Back', root_path %>
+<% end %>
+
+<%= link_to 'Continue >', root_path %>
+</div>

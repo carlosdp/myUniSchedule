@@ -13,11 +13,11 @@ class OAuthController < ApplicationController
       session[:user_id] = nil
       flash[:success] = "Successfully logged out of session!"
       
-      redirect_to :controller => 'schedules', :action => 'index'
+      redirect_to root_path
       
     else
       
-      redirect_to :controller => 'schedules', :action => 'index'
+      redirect_to root_path
       
     end
     

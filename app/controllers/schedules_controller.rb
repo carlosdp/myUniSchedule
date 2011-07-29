@@ -14,8 +14,8 @@ class SchedulesController < ApplicationController
   def index
     graph = 0
     begin
-      graph = Koala::Facebook::GraphAPI.new(session[:access_token])
-      @user = graph.get_object('me') if session[:access_token]
+      @graph = Koala::Facebook::GraphAPI.new(session[:access_token])
+      @user = @graph.get_object('me') if session[:access_token]
     rescue
       session[:access_token] = nil
     end
@@ -69,6 +69,10 @@ class SchedulesController < ApplicationController
         
       end
       
+    else
+      
+      session[:user_id] = nil
+      
     end
     
     if session[:user_id]
@@ -83,7 +87,7 @@ class SchedulesController < ApplicationController
           tsch = Course.find_by_id(c.id).schedules
           @students[c.name] = []
           tsch.each do |u|
-            @students[c.name] << u.user
+            @students[c.name] << u.user #if u.user.id != session[:user_id]
           end
           @usermax = @students[c.name].count if @students[c.name].count > @usermax
         
@@ -108,7 +112,15 @@ class SchedulesController < ApplicationController
     is_logged_in_fb?
     @schedule = Schedule.find(params[:id])
     
-    @courses = @schedule.courses
+    if @schedule.user.id == session[:user_id]
+    
+      @courses = @schedule.courses
+      
+    else
+      
+      flash[:error] = "This schedule is not yours!"
+      
+    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -120,18 +132,27 @@ class SchedulesController < ApplicationController
   # GET /schedules/new.xml
   def new
     is_logged_in_fb?
+    
+    if User.find(session[:user_id]).schedule
+      
+      redirect_to root_path
+      
+    else
+    
     @schedule = Schedule.new
 
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @schedule }
     end
+    end
   end
 
   # GET /schedules/1/edit
   def edit
     is_logged_in_fb?
-    @schedule = Schedule.find(params[:id])
+    #@schedule = Schedule.find(params[:id])
+    redirect_to root_path
   end
 
   # POST /schedules
@@ -182,17 +203,7 @@ class SchedulesController < ApplicationController
   # PUT /schedules/1.xml
   def update
     is_logged_in_fb?
-    @schedule = Schedule.find(params[:id])
-
-    respond_to do |format|
-      if @schedule.update_attributes(params[:schedule])
-        format.html { redirect_to(@schedule, :notice => 'Schedule was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @schedule.errors, :status => :unprocessable_entity }
-      end
-    end
+    redirect_to root_path
   end
 
   # DELETE /schedules/1
@@ -200,10 +211,16 @@ class SchedulesController < ApplicationController
   def destroy
     is_logged_in_fb?
     @schedule = Schedule.find(params[:id])
-    @schedule.destroy
+    if @schedule.user.id == session[:user_id]
+      @schedule.destroy
+    else
+      
+      flash[:error] = "That's not your schedule silly!"
+      
+    end
 
     respond_to do |format|
-      format.html { redirect_to(schedules_url) }
+      format.html { redirect_to(root_path) }
       format.xml  { head :ok }
     end
   end

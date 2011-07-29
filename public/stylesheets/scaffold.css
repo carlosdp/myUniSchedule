@@ -1,10 +1,96 @@
-body { background: #130000 url(/images/tartan-bg.jpg) repeat-x; color: #333; }
+body { background: #130000 url(/images/tartan-bg.jpg) repeat-x; color: #333; padding:0; border:0; margin:0; }
 
 #content
 {
 	
 	background-color:#F2FF80;
-	
+	margin-top:5em;
+	height:100%;
+	margin-right:5px;
+	margin-left:5px;
+	padding:4px;
+}
+
+#content h1
+{
+	color:blue;
+}
+
+#uni-form
+{
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+}
+
+#uni-error
+{
+	background-color:red;
+	color:white;
+}
+
+#topbar
+{
+	margin-top:0px;
+	background-color:#172CAF;
+	width:100%;
+	height: 20px;
+	padding:8px;
+	color:white;
+}
+
+#topbar a
+{
+	color:white;
+}
+
+#topbar #user
+{
+	float:right;
+	border:2px;
+	margin-right:10px;
+}
+
+#topbar #user img
+{
+	height:25px;
+	width:25px;
+}
+
+#topbar #login img
+{
+	height:20px;
+}
+
+#topbar #logout
+{
+	clear:right;
+}
+
+#schops a
+{
+	color:red;
+}
+
+#maintext
+{
+	background-color:#2E3983;
+	color:white;
+	text-align: center;
+}
+
+#footer
+{
+	margin-bottom:0;
+	background-color:black;
+	padding:3px;
+	margin-top:3px;
+}
+
+#uni-success
+{
+	background-color:green;
+	color:white;
 }
 
 body, p, ol, ul, td {
@@ -19,8 +105,8 @@ pre {
   font-size: 11px;
 }
 
-a { color: #000; }
-a:visited { color: #666; }
+a { color: blue; }
+a:visited { color: blue; }
 a:hover { color: #fff; background-color:#000; }
 
 div.field, div.actions {
