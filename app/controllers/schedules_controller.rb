@@ -35,6 +35,7 @@ class SchedulesController < ApplicationController
             cuser = User.create({:fbid => @user["id"], :name => @user["name"], :link => @user["link"]})
             session[:user_id] = cuser[:id]
             flash[:success] = "Congratulations! You are now linked to myUniSchedule. Follow the instructions to post your schedule!"
+            break
             
           end
           
