@@ -96,7 +96,7 @@ class SchedulesController < ApplicationController
       
     end
     
-    @oauth = Koala::Facebook::OAuth.new("http://localhost:3000/o_auth/redirect") if !session[:access_token]
+    @oauth = Koala::Facebook::OAuth.new("http://myunischedule.com/o_auth/redirect") if !session[:access_token]
     
     @schedules = Schedule.all
 
