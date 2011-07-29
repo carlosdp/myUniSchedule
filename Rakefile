@@ -12,7 +12,7 @@ namespace :users do
   desc "Get number of users"
   task :count => :environment do
     
-    puts "User Count: {User.all.count}"
+    puts "User Count: #{User.all.count}"
     
   end
   
