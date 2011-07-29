@@ -17,3 +17,14 @@ namespace :users do
   end
   
 end
+
+namespace :courses do
+  
+  desc "Get number of courses"
+  task :count => :environment do
+    
+    puts "Courses Count: #{Course.all.count}"
+    
+  end
+  
+end
