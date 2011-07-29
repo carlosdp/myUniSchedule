@@ -1,6 +1,6 @@
 class OAuthController < ApplicationController
   def redirect
-    session[:access_token] = Koala::Facebook::OAuth.new("http://myunischedule/o_auth/redirect").get_access_token(params[:code]) if params[:code]
+    session[:access_token] = Koala::Facebook::OAuth.new("http://myunischedule.com/o_auth/redirect").get_access_token(params[:code]) if params[:code]
     
     redirect_to root_path
   end
