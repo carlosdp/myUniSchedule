@@ -85,6 +85,18 @@ body { background: #130000 url(/images/tartan-bg.jpg) repeat-x; color: #333; pad
 	background-color:black;
 	padding:3px;
 	margin-top:3px;
+	color:white;
+}
+
+#footer p
+{
+	float:right;
+	clear:left;
+}
+
+#footer a
+{
+	color:white;
 }
 
 #uni-success
