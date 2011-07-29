@@ -1,6 +1,6 @@
 module Facebook
-  APP_ID = "210680082313156"
-  SECRET = "fa6ac92e5d3af42da76aa9b2caa13a27"
+  APP_ID = ENV['APP_ID'] ? ENV['APP_ID'] : ""
+  SECRET = ENV['SECRET'] ? ENV['SECRET'] : ""
 end
 
 Koala::Facebook::OAuth.class_eval do
