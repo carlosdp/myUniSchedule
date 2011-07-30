@@ -13,8 +13,8 @@
 	<div id="accordion">
 		<% e = 0 %>
 		<% @courses.each do |c|%>
-	    <div class="accordionButton" style="background-color:<%= @colors[e] ? @colors[e] : "#00000" %>;color:<%= @textColors[e] ? @textColors[e] : "#FFFFF" %>;"><%= c.name %></div>
-		<div class="accordionContent" style="background-color:<%= @colors[e] ? @colors[e] : "#00000" %>">
+	    <div class="accordionButton" style="background-color:<%= @colors[e] ? @colors[e] : "#000000" %>;color:<%= @textColors[e] ? @textColors[e] : "#FFFFFF" %>;"><%= c.name %></div>
+		<div class="accordionContent" style="background-color:<%= @colors[e] ? @colors[e] : "#000000" %>">
 			<table style="margin:0 auto;text-align:center;">
 				<% @students[c.name].each do |s| %>
 				<tr>

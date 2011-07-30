@@ -86,8 +86,8 @@ class SchedulesController < ApplicationController
       luser = User.find_by_id(session[:user_id])
       @schedu = luser.schedule
       if @schedu
-        @colors = ["#FF0000", "#162EAE", "#00AF64", "#CE0071", "#7309AA", "#FF4F00", "#323086", "#CE0071", "#250672", "#000000"]
-        @textColors = ["#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF"]
+        @colors = ["#FF0000", "#162EAE", "#00AF64", "#CE0071", "#7309AA", "#FF4F00", "#323086", "#CE0071", "#250672", "#000000", "#000000", "#000000", "#000000", "#000000"]
+        @textColors = ["#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF"]
         @weekds = {"SU" => 7, "MO" => 8, "TU" => 9, "WE" => 10, "TH" => 11, "FR" => 12, "SA" => 13}
         @students = Hash.new
         @usermax = 0
