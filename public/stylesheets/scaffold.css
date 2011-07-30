@@ -9,6 +9,7 @@ body { background: #130000 url(/images/tartan-bg.jpg) repeat-x; color: #333; pad
 	margin-right:5px;
 	margin-left:5px;
 	padding:4px;
+	text-align:center;
 }
 
 #content h1
@@ -27,6 +28,12 @@ body { background: #130000 url(/images/tartan-bg.jpg) repeat-x; color: #333; pad
 {
 	background-color:red;
 	color:white;
+}
+
+#upform
+{
+	width:50%;
+	margin:0 auto;
 }
 
 #topbar

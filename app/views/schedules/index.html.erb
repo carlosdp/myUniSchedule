@@ -1,3 +1,4 @@
+<%= javascript_include_tag 'fullcalendar.js' %>
 <%= render :partial => 'topbar' %>
 <div id="content">
 <div id="uni-error"><%= flash[:error]%></div>
@@ -34,7 +35,9 @@
 <% if @user %>
 <div id="maintext">You are ready to upload your schedule! Go to SIO -> Course Schedule -> Semester Schedule <span style="color:red">(MAKE SURE YOU USE THE "SEMESTER SCHEDULE" NOT THE "PLAN COURSE SCHEDULE" ! If you make this mistake, simply delete your schedule on this site and re-upload.)</span>, and click "Calendar Export". It will give you a ".ics" file. Upload this file by clicking the link below and you will be able to see who else is in your classes!</div>
 </br>
-<div style="align:center"><%= link_to 'Upload my Schedule', new_schedule_path %></div>
+<div id='upform'>
+<%= render 'form' %>
+</div>
 <% else %>
 
 <div id="maintext">Welcome to myUniSchedule! This site allows students (currently only CMU students) to upload their class schedules and link with others that are in their classes! Click the facebook button above to login with your facebook. You must have Carnegie Mellon University in you education in order to register at this time due to the way we parse schedules. The site is not the prettiest at the moment and may have bugs. If you have any errors or gltiches (or suggestions), email me at hmind2005@gmail.com or follow me on twitter below.</div>
