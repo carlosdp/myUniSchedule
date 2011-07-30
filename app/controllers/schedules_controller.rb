@@ -26,7 +26,7 @@ class SchedulesController < ApplicationController
       if !session[:user_id]
       
       if !User.exists?(:fbid => @user["id"])
-        
+        if @user["education"]
         @user["education"].each do |e|
           
           if e["type"] == "College" && e["school"]["name"] == "Carnegie Mellon University"
@@ -38,6 +38,11 @@ class SchedulesController < ApplicationController
             break
             
           end
+        end
+          
+        else
+          
+          flash[:error] = "You must allow this site to access your education in facebook!"
           
         end
         
