@@ -96,7 +96,7 @@ class SchedulesController < ApplicationController
           tsch = Course.find_by_id(c.id).schedules
           @students[c.name] = []
           tsch.each do |u|
-            @students[c.name] << u.user #if u.user.id != session[:user_id]
+            @students[c.name] << u.user if u.user.id != session[:user_id]
           end
           @usermax = @students[c.name].count if @students[c.name].count > @usermax
         
