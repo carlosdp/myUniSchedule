@@ -1,58 +1,74 @@
+<% zone = ActiveSupport::TimeZone.new("Eastern Time (US & Canada)") %>
 $(document).ready(function() {
-
-	var date = new Date();
-	var d = date.getDate();
-	var m = date.getMonth();
-	var y = date.getFullYear();
 	
 	$('#calendar').fullCalendar({
 		header: false,
+		year: 2011,
+		month: 7,
+		date: 7,
 		events: [
+		<% i = 0 %>
+		<% minTime = 24 %>
+		<% maxTime = 0 %>
+		<% kends = "false" %>
+		<% @courses.each do |c|%>
+			<% minTime = c.start.hour-1 if c.start.hour < minTime %>
+			<% maxTime = c.end.hour+2 if c.end.hour > maxTime %>
+			<% c.weekdays.delete("[").delete("]").delete('"').delete(" ").split(",").each do |w| %>
+			<% kends = "true" if w == "SU" || w == "SA" %>
 			{
-				title: 'All Day Event',
-				start: new Date(y, m, 1)
+				title: '<%= c.name %>',
+				start: new Date(2011, 7, <%= @weekds[w] %>, <%= c.start.hour %>, <%= c.start.min %>),
+				end: new Date(2011, 7, <%= @weekds[w] %>, <%= c.end.hour %>, <%= c.end.min %>),
+				allDay: false,
+				className: 'calevent1',
+				color: '<%= @colors[i] ? @colors[i] : "#00000" %>',
+				textColor: '<%= @textColors[i] ? @textColors[i] : "#FFFFF" %>'
 			},
-			{
-				title: 'Long Event',
-				start: new Date(y, m, d-5),
-				end: new Date(y, m, d-2)
-			},
-			{
-				id: 999,
-				title: 'Repeating Event',
-				start: new Date(y, m, d-3, 16, 0),
-				allDay: false
-			},
-			{
-				id: 999,
-				title: 'Repeating Event',
-				start: new Date(y, m, d+4, 16, 0),
-				allDay: false
-			},
-			{
-				title: 'Meeting',
-				start: new Date(y, m, d, 10, 30),
-				allDay: false
-			},
-			{
-				title: 'Lunch',
-				start: new Date(y, m, d, 12, 0),
-				end: new Date(y, m, d, 14, 0),
-				allDay: false
-			},
-			{
-				title: 'Birthday Party',
-				start: new Date(y, m, d+1, 19, 0),
-				end: new Date(y, m, d+1, 22, 30),
-				allDay: false
-			},
-			{
-				title: 'Click for Google',
-				start: new Date(y, m, 28),
-				end: new Date(y, m, 29),
-				url: 'http://google.com/'
-			}
-		], minTime: '8:00am', disableDragging: true, disableResizing: true
+			<% end %>
+			<% i+=1 %>
+		<% end %>
+		], minTime: '<%= minTime %>:00',maxTime: '<%= maxTime %>:00', weekends: <%= kends %>, disableDragging: true, disableResizing: true
 	}).fullCalendar('changeView', 'agendaWeek');
 	
+	//ACCORDION BUTTON ACTION (ON CLICK DO THE FOLLOWING)
+	$('.accordionButton').click(function() {
+
+		//REMOVE THE ON CLASS FROM ALL BUTTONS
+		$('.accordionButton').removeClass('on');
+		  
+		//NO MATTER WHAT WE CLOSE ALL OPEN SLIDES
+	 	$('.accordionContent').slideUp('normal');
+   
+		//IF THE NEXT SLIDE WASN'T OPEN THEN OPEN IT
+		if($(this).next().is(':hidden') == true) {
+			
+			//ADD THE ON CLASS TO THE BUTTON
+			$(this).addClass('on');
+			  
+			//OPEN THE SLIDE
+			$(this).next().slideDown('normal');
+		 } 
+		  
+	 });
+	  
+	
+	/*** REMOVE IF MOUSEOVER IS NOT REQUIRED ***/
+	
+	//ADDS THE .OVER CLASS FROM THE STYLESHEET ON MOUSEOVER 
+	$('.accordionButton').mouseover(function() {
+		$(this).addClass('over');
+		
+	//ON MOUSEOUT REMOVE THE OVER CLASS
+	}).mouseout(function() {
+		$(this).removeClass('over');										
+	});
+	
+	/*** END REMOVE IF MOUSEOVER IS NOT REQUIRED ***/
+	
+	
+	/********************************************************************************************************************
+	CLOSES ALL S ON PAGE LOAD
+	********************************************************************************************************************/	
+	$('.accordionContent').hide();
 });

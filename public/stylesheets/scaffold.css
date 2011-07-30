@@ -1,14 +1,22 @@
-body { background: #130000 url(/images/tartan-bg.jpg) repeat-x; color: #333; padding:0; border:0; margin:0; }
+body 
+{ 
+	background: #130000 url(/images/tartan-bg.jpg) repeat-x; 
+	/*color: #333;*/
+	padding:0;
+	border:0;
+	margin:0;
+ }
 
 #content
 {
 	
-	background-color:#F2FF80;
+	background-color:#F7F3E8;
 	margin-top:5em;
+	min-height:650px;
 	height:100%;
-	margin-right:5px;
-	margin-left:5px;
-	padding:4px;
+	margin-right:2px;
+	margin-left:2px;
+	padding:0px;
 	text-align:center;
 }
 
@@ -36,11 +44,19 @@ body { background: #130000 url(/images/tartan-bg.jpg) repeat-x; color: #333; pad
 	margin:0 auto;
 }
 
+#calendar
+{
+	background-color:white;
+	width:50%;
+	margin-left:10px;
+	float:left;
+}
+
 #topbar
 {
 	margin-top:0px;
-	background-color:#172CAF;
-	width:100%;
+	background-color:#F2583E;
+	width:98.9%;
 	height: 20px;
 	padding:8px;
 	color:white;
@@ -74,14 +90,27 @@ body { background: #130000 url(/images/tartan-bg.jpg) repeat-x; color: #333; pad
 	clear:right;
 }
 
+#schedulewrap
+{
+	margin-left:auto;
+	margin-right:auto;
+	width:95%;
+}
+
 #schops a
 {
-	color:red;
+	color:black;
+}
+
+#schops a:hover
+{
+	color:white;
+	background-color:black;
 }
 
 #maintext
 {
-	background-color:#2E3983;
+	background-color:#2B3E42;
 	color:white;
 	text-align: center;
 }
@@ -123,51 +152,51 @@ body, p, ol, ul, td {
   line-height: 18px;
 }
 
-pre {
-  background-color: #eee;
-  padding: 10px;
-  font-size: 11px;
-}
-
+/*
 a { color: blue; }
 a:visited { color: blue; }
-a:hover { color: #fff; background-color:#000; }
-
-div.field, div.actions {
-  margin-bottom: 10px;
-}
+a:hover { color: #fff; background-color:#000; }*/
 
 #notice {
   color: green;
 }
 
-.field_with_errors {
-  padding: 2px;
-  background-color: red;
-  display: table;
+/* ACCORDION */
+
+#accordion
+{
+	width:40%;
+	float:left;
+	margin-right:0;
+	margin-left:20px;
 }
 
-#error_explanation {
-  width: 450px;
-  border: 2px solid red;
-  padding: 7px;
-  padding-bottom: 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-}
+.accordionButton {	
+	width: 100%;
+	float: left;
+	_float: none;  /* Float works in all browsers but IE6 */
+	/*background: #003366;*/
+	border-bottom: 1px solid #FFFFFF;
+	cursor: pointer;
+	color:white;
+	}
+	
+.accordionContent {	
+	width: 100%;
+	color:white;
+	float: left;
+	_float: none; /* Float works in all browsers but IE6 */
+	/*background: #95B1CE;*/
+	}
+	
+/***********************************************************************************************************************
+ EXTRA STYLES ADDED FOR MOUSEOVER / ACTIVE EVENTS
+************************************************************************************************************************/
 
-#error_explanation h2 {
-  text-align: left;
-  font-weight: bold;
-  padding: 5px 5px 5px 15px;
-  font-size: 12px;
-  margin: -7px;
-  margin-bottom: 0px;
-  background-color: #c00;
-  color: #fff;
-}
-
-#error_explanation ul li {
-  font-size: 12px;
-  list-style: square;
-}
+.on {
+	background: #990000;
+	}
+	
+.over {
+	background: #CCCCCC;
+	}

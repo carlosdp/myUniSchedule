@@ -12,7 +12,7 @@ class SchedulesController < ApplicationController
   # GET /schedules
   # GET /schedules.xml
   def index
-    graph = 0
+    @graph = false
     begin
       @graph = Koala::Facebook::GraphAPI.new(session[:access_token])
       @user = @graph.get_object('me') if session[:access_token]
@@ -86,6 +86,9 @@ class SchedulesController < ApplicationController
       luser = User.find_by_id(session[:user_id])
       @schedu = luser.schedule
       if @schedu
+        @colors = ["#FF0000", "#162EAE", "#00AF64", "#CE0071", "#7309AA", "#FF4F00", "#323086", "#CE0071", "#250672", "#000000"]
+        @textColors = ["#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF"]
+        @weekds = {"SU" => 7, "MO" => 8, "TU" => 9, "WE" => 10, "TH" => 11, "FR" => 12, "SA" => 13}
         @students = Hash.new
         @usermax = 0
         @courses = @schedu.courses
@@ -93,7 +96,7 @@ class SchedulesController < ApplicationController
           tsch = Course.find_by_id(c.id).schedules
           @students[c.name] = []
           tsch.each do |u|
-            @students[c.name] << u.user if u.user.id != session[:user_id]
+            @students[c.name] << u.user #if u.user.id != session[:user_id]
           end
           @usermax = @students[c.name].count if @students[c.name].count > @usermax
         
@@ -196,7 +199,7 @@ class SchedulesController < ApplicationController
 
     respond_to do |format|
       if success 
-        format.html { redirect_to(@schedule, :notice => 'Schedule was successfully created.') }
+        format.html { redirect_to(root_path, :notice => 'Schedule was successfully created.') }
         format.xml  { render :xml => @schedule, :status => :created, :location => @schedule }
       else
         format.html { render :action => "new" }
