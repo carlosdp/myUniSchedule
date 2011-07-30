@@ -23,6 +23,13 @@
 					</td>
 				</tr>
 				<% end %>
+				<% if @students[c.name].count < 1%>
+					<tr>
+						<td>
+							No one from this section has added their schedules =( Check back later!
+						</td>
+					</tr>
+				<% end %>
 			</table>
 		</div>
 		<% e+=1 %>
