@@ -47,7 +47,7 @@
 
 <div id="maintext">Welcome to myUniSchedule! This site allows students (currently only CMU students) to upload their class schedules and link with others that are in their classes! Click the facebook button above to login with your facebook. You must have Carnegie Mellon University in you education in order to register at this time due to the way we parse schedules. The site is not the prettiest at the moment and may have bugs. If you have any errors or gltiches (or suggestions), email me at hmind2005@gmail.com or follow me on twitter below.</div>
 </br>
-<%= image_tag 'introim.png', :style=> "margin-left:auto;margin-right:auto;"%>
+<%= link_to image_tag('introim.png'), @oauth.url_for_oauth_code(:permissions => 'user_education_history'), :style=> "margin-left:auto;margin-right:auto;" %>
 <% end %>
 <% end %>
 </div>
