@@ -1,10 +1,21 @@
 <%= render :partial => 'topbar' %>
 <div id="content">
+<div id="headlogo"></div>
 <div id="uni-error"><%= flash[:error]%></div>
 <div id="uni-success"><%= flash[:success]%></div>
 
+<% if @schools %>
+<ol style="width:50%;margin: 0 auto;">
+	<% @schools.each do |s| %>
+	
+		<li><%= s.name %></li>
+	
+	<% end %>
+</ol>
+<% end %>
+
 <% if @courses %>
-	<div id="maintext">Below is your schedule of classes with the names and facebook links to all of the students in those classes that have uploaded their schedules. Once more students in your classes upload their schedules, they will appear on this page. Make sure to check back every once in a while for new additions! (If you are from another school but are interested in using this site for your school, follow me on twitter below and send me a message. I will post updates on there.)</div></br>
+	<div id="maintext">Below is your schedule of classes with the names and facebook links to all of the students in those classes that have uploaded their schedules. Once more students in your classes upload their schedules, they will appear on this page. Make sure to check back every once in a while for new additions!</div></br>
 	</br>
 	<div id="schedulewrap">
 	<div id='calendar'><div id="schops">
@@ -38,16 +49,16 @@
 	</div>
 <% else %>
 <% if @user %>
-<div id="maintext">You are ready to upload your schedule! <ol style="width:50%;margin: 0 auto;"> <li>Go to SIO</li><li>Go to "Course Schedule"</li><li>Click "Semester Schedule"</li><span style="color:red">(MAKE SURE YOU USE THE "SEMESTER SCHEDULE" NOT THE "PLAN COURSE SCHEDULE" ! If you make this mistake, simply delete your schedule on this site and re-upload.)</span><li>Click "Calendar Export"</li><li>Upload this file (.ics) by clicking "Browse" below</li><li>You will be able to see who else is in your classes!</li></ol></div>
+<div id="maintext"><%= render :partial => "intro#{current_user.school.id}" %></div>
 </br>
 <div id='upform'>
 <%= render 'form' %>
 </div>
 <% else %>
 
-<div id="maintext">Welcome to myUniSchedule! This site allows students (currently only CMU students) to upload their class schedules and link with others that are in their classes! Click the facebook button above to login with your facebook. You must have Carnegie Mellon University in you education in order to register at this time due to the way we parse schedules. The site is not the prettiest at the moment and may have bugs. If you have any errors or gltiches (or suggestions), email me at hmind2005@gmail.com or follow me on twitter below.</div>
+<div id="maintext">Welcome to myUniSchedule! This site allows students to upload their class schedules and link with others that are in their classes! Click the facebook button above to login with your facebook. You must have a supported school in your facebook education profile. If you have any errors or gltiches (or suggestions), email me at hmind2005@gmail.com or follow me on twitter below.</div>
 </br>
-<%= link_to image_tag('introim.png'), @oauth.url_for_oauth_code(:permissions => 'user_education_history'), :style=> "margin-left:auto;margin-right:auto;" %>
+<%= link_to image_tag('introim.png', :style => "width:100%;"), @oauth.url_for_oauth_code(:permissions => 'user_education_history'), :style=> "margin-left:auto;margin-right:auto;" %>
 <% end %>
 <% end %>
 </div>

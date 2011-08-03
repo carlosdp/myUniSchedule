@@ -86,7 +86,7 @@ namespace :courses do
       
       str = c.name
       
-      c.update_attributes({:number => str.scan(/(\d\d\d\d\d)/).first.first.to_i, :section => str.scan(/\d\d\d\d\d (.)/).first.first})
+      c.update_attributes({:number => str.scan(/(\d\d\d\d\d)/).first.first.to_i, :section => str.scan(/\d\d\d\d\d (\w+)/).first.first})
       
       i+=1
     end
@@ -101,20 +101,19 @@ namespace :courses do
     
     courses.each do |c|
       
-      if seenN[c.number] && seenS[c.section]
+      if seenN[c.number.to_s+c.section] && c.name == c.name.upcase
         
         scheds = c.schedules
         scheds.each do |s|
           
-          s.courses << Course.find(seenS[c.section])
+          s.courses << Course.find(seenS[c.number.to_s+c.section])
           s.courses.delete(c)
           
         end
         
       else
         
-        seenN[c.number] = true unless seenN[c.number]
-        seenS[c.section] = c.id unless seenS[c.section]
+        seenN[c.number.to_s+c.section] = c.id unless seenN[c.number.to_s+c.section]
         
       end
       

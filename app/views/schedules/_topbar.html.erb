@@ -4,7 +4,7 @@
 	<div id="login">Login via <%= link_to image_tag('fbbutton.gif'), @oauth.url_for_oauth_code(:permissions => 'user_education_history') %></div>
 	<% else %>
 	<%= link_to 'Logout', {:controller => 'o_auth', :action => 'logout'}, :id => 'logout' %>
-	<div id="user"><%= @user["name"] %>
+	<div id="user">School: <%= current_user.school.name %> | <%= @user["name"] %>
 	<%= image_tag @graph.get_picture('me',{:type => 'small'}) %></div>
 	<% end %>
 	

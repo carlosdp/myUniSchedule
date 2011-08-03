@@ -51,8 +51,12 @@ class SchedulesController < ApplicationController
           session[:access_token] = nil
           session[:user_id] = nil
           @user = nil
-          flash[:error] = "You must be a Carnegie Mellon University student to register at this time. 
-          If you are such a student, please add CMU to your education on your profile and try again."
+          flash[:error] = "Your school is not currently supported by our software. Below is a list of our currently supported schools. If your" + 
+          " school is listed, please make sure it appears exactly as shown on your facebook Education profile. If not, email hmind2005@gmail.com with" +
+          " your school name, a copy of the iCalendar or vCalendar output of your schedule, and instructions on how someone in your school would obtain" +
+          " that file. Thank you!"
+          
+          @schools = School.all
           
           
         end
@@ -108,8 +112,6 @@ class SchedulesController < ApplicationController
     end
     
     @oauth = Koala::Facebook::OAuth.new("#{ENV['SITE'] ? ENV['SITE'] : 'http://localhost:3000'}/o_auth/redirect") if !session[:access_token]
-    
-    @schedules = Schedule.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -252,33 +254,72 @@ class SchedulesController < ApplicationController
     if current_user.school.name == "Carnegie Mellon University"
       
       return false if sch.first.prodid.include?("Tartan")
-      
-    end
 
-    sch.first.events.each do |e|
+      sch.first.events.each do |e|
 
-      weekdys = []
+        weekdys = []
 
-      if !classes[e.summary]
-        classes[e.summary] = true
-        e.recurrence_rules.each do |r|
+        if !classes[e.summary]
+          classes[e.summary] = true
+          e.recurrence_rules.each do |r|
 
-          weekdy = r.parse_weekday_list("BYDAY", r.orig_value)
-          weekdy.each do |w|
+            weekdy = r.parse_weekday_list("BYDAY", r.orig_value)
+            weekdy.each do |w|
 
-            weekdys << w.to_s.sub(",","")
+              weekdys << w.to_s.sub(",","")
+
+            end
 
           end
+        
+          return false if e.summary != e.summary.upcase
+
+          courses << {:name => e.summary, :description => e.description, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
+          :number => e.summary.scan(/(\d\d\d\d\d)/).first.first.to_i, :section => e.summary.scan(/\d\d\d\d\d (\w+)/).first.first, 
+          :school_id => current_user.school.id}
 
         end
-        
-        return false if e.summary != e.summary.upcase
+      end
+    elsif current_user.school.name == "University of Pennsylvania"
+      
+      
+      sch.first.events.each do |e|
 
-        courses << {:name => e.summary, :description => e.description, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
-          :number => e.summary.scan(/(\d\d\d\d\d)/).first.first.to_i, :section => e.summary.scan(/\d\d\d\d\d (.)/).first.first, :school_id => current_user.school.id}
+        weekdys = []
+
+        
+          e.recurrence_rules.each do |r|
+
+            weekdy = r.parse_weekday_list("BYDAY", r.orig_value)
+            weekdy.each do |w|
+
+              weekdys << w.to_s.sub(",","")
+
+            end
+          end
+          
+          repl = false
+          
+          courses.each do |c|
+            
+            if c[:name] == e.summary
+              
+              c[:weekdays] = c[:weekdays] + "," + weekdys.compact.to_s
+              repl = true
+              logger.debug "Found duplicate #{c[:summary]}"
+              
+            end
+            
+          end
+          
+          unless repl
+            courses << {:name => e.summary, :description => e.description, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
+            :number => e.summary.scan(/.*(\d\d\d\d\d)\d/).first.first.to_i, :section => e.summary.scan(/.*\d\d\d\d\d(\d)/).first.first, 
+            :school_id => current_user.school.id}
+          end
 
       end
-
+      
     end
     
     return courses

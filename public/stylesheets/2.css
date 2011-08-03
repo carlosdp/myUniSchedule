@@ -1,6 +1,6 @@
 body 
 { 
-	background: #5EC4CD; 
+	background: #011F5B; 
 	/*color: #333;*/
 	padding:0;
 	border:0;
@@ -12,15 +12,13 @@ body
 	
 	background-color:#F7F3E8;
 	margin-top:1em;
-	min-height:650px;
+	min-height:700px;
 	height:100%;
-	margin-right:2px;
-	margin-left:2px;
+	margin-right:auto;
+	margin-left:auto;
 	padding:0px;
 	text-align:center;
 	width:85%;
-	margin-left:auto;
-	margin-right:auto;
 }
 
 #content h1
@@ -30,8 +28,8 @@ body
 
 #headlogo
 {
-	background-color:white;
-	background-image: url(/images/unischedulelogowhite.png);
+	background-color:black;
+	background-image: url(/images/unischedulelogoblack.png);
 	background-repeat: no-repeat;
 	background-position:center;
 	width:100%;
@@ -68,7 +66,7 @@ body
 #topbar
 {
 	margin-top:0px;
-	background-color:#015C65;
+	background-color:#990000;
 	width:98.9%;
 	height: 20px;
 	padding:8px;
@@ -123,7 +121,7 @@ body
 
 #maintext
 {
-	background-color:#028E9B;
+	background-color:#2B3E42;
 	color:white;
 	text-align: center;
 }
