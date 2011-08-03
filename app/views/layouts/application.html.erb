@@ -2,7 +2,9 @@
 <html>
 <head>
   <title>myUniSchedule</title>
-  <%= stylesheet_link_tag :all %>
+  <%= stylesheet_link_tag 'fullcalendar.css' %>
+	<% styling = current_user ? current_user.school.id.to_s : 'default' %>
+	<%= stylesheet_link_tag styling + '.css' %>
 <%= javascript_include_tag :defaults %>
 <%= javascript_include_tag 'fullcalendar.js' %>
   <%= csrf_meta_tag %>

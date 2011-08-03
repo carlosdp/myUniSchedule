@@ -122,4 +122,23 @@ namespace :courses do
     
   end
   
+  desc "Add CMU School ID"
+  task :addid => :environment do
+    
+    schoolid = School.find_by_name("Carnegie Mellon University").id
+    
+    puts "Found CMU: #{schoolid}"
+    
+    courses = Course.all
+    
+    courses.each do |c|
+      
+      c.update_attributes({:school_id => schoolid})
+      
+    end
+    
+    puts "Done!"
+    
+  end
+  
 end

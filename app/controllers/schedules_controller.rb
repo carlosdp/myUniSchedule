@@ -181,13 +181,13 @@ class SchedulesController < ApplicationController
     
     courselist.each do |c|
       
-      if !Course.exists?(:name => c[:name])
+      if !Course.exists?({:number => c[:number], :section => c[:section], :school_id => c[:school_id]})
         
         @schedule.courses.create(c)
         
       else
         
-        @schedule.courses << Course.find(:first, :conditions => {:name => c[:name]})
+        @schedule.courses << Course.find(:first, :conditions => {:number => c[:number], :section => c[:section], :school_id => c[:school_id]})
         
       end
       
@@ -275,7 +275,7 @@ class SchedulesController < ApplicationController
         return false if e.summary != e.summary.upcase
 
         courses << {:name => e.summary, :description => e.description, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
-          :number => e.summary.scan(/(\d\d\d\d\d)/).first.first.to_i, :section => e.summary.scan(/\d\d\d\d\d (.)/).first.first}
+          :number => e.summary.scan(/(\d\d\d\d\d)/).first.first.to_i, :section => e.summary.scan(/\d\d\d\d\d (.)/).first.first, :school_id => current_user.school.id}
 
       end
 
