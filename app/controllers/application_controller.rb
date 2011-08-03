@@ -11,4 +11,10 @@ class ApplicationController < ActionController::Base
         redirect_to "http://#{APP_DOMAIN}", :status => 301
       end
     end
+    
+    def current_user
+      
+      User.find(session[:user_id])
+      
+    end
 end

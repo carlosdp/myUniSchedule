@@ -29,10 +29,10 @@ class SchedulesController < ApplicationController
         if @user["education"]
         @user["education"].each do |e|
           
-          if e["type"] == "College" && e["school"]["name"] == "Carnegie Mellon University"
+          if e["type"] == "College" && School.exists?(:name => e["school"]["name"])
             
             validUser = true
-            cuser = User.create({:fbid => @user["id"], :name => @user["name"], :link => @user["link"]})
+            cuser = School.find_by_name(e["school"]["name"]).user.create({:fbid => @user["id"], :name => @user["name"], :link => @user["link"]})
             session[:user_id] = cuser[:id]
             flash[:success] = "Congratulations! You are now linked to myUniSchedule. Follow the instructions to post your schedule!"
             break
@@ -86,8 +86,10 @@ class SchedulesController < ApplicationController
       luser = User.find_by_id(session[:user_id])
       @schedu = luser.schedule
       if @schedu
-        @colors = ["#FF0000", "#162EAE", "#00AF64", "#CE0071", "#7309AA", "#FF4F00", "#323086", "#CE0071", "#250672", "#000000", "#000000", "#000000", "#000000", "#000000"]
-        @textColors = ["#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF"]
+        @colors = ["#FF0000", "#162EAE", "#00AF64", "#CE0071", "#7309AA", "#FF4F00", "#323086", "#CE0071", "#250672", "#000000", "#000000", 
+          "#000000", "#000000", "#000000"]
+        @textColors = ["#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", 
+          "#FFFFF", "#FFFFF", "#FFFFF"]
         @weekds = {"SU" => 7, "MO" => 8, "TU" => 9, "WE" => 10, "TH" => 11, "FR" => 12, "SA" => 13}
         @students = Hash.new
         @usermax = 0
@@ -246,6 +248,12 @@ class SchedulesController < ApplicationController
     courses = []
 
     return false if sch.count > 1
+    
+    if current_user.school.name == "Carnegie Mellon University"
+      
+      return false if sch.first.prodid.include?("Tartan")
+      
+    end
 
     sch.first.events.each do |e|
 
@@ -263,8 +271,11 @@ class SchedulesController < ApplicationController
           end
 
         end
+        
+        return false if e.summary != e.summary.upcase
 
-        courses << {:name => e.summary, :description => e.description, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend}
+        courses << {:name => e.summary, :description => e.description, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
+          :number => e.summary.scan(/(\d\d\d\d\d)/).first.first.to_i, :section => e.summary.scan(/\d\d\d\d\d (.)/).first.first}
 
       end
 
