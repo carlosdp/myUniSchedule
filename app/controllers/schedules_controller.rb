@@ -32,7 +32,7 @@ class SchedulesController < ApplicationController
           if e["type"] == "College" && School.exists?(:name => e["school"]["name"])
             
             validUser = true
-            cuser = School.find_by_name(e["school"]["name"]).user.create({:fbid => @user["id"], :name => @user["name"], :link => @user["link"]})
+            cuser = School.find_by_name(e["school"]["name"]).users.create({:fbid => @user["id"], :name => @user["name"], :link => @user["link"]})
             session[:user_id] = cuser[:id]
             flash[:success] = "Congratulations! You are now linked to myUniSchedule. Follow the instructions to post your schedule!"
             break

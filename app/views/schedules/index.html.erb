@@ -49,7 +49,7 @@
 	</div>
 <% else %>
 <% if @user %>
-<div id="maintext"><%= render :partial => "intro#{current_user.school.id}" %></div>
+<div id="maintext"><%= render :partial => "intro#{current_user.school.name.delete(' ')}" %></div>
 </br>
 <div id='upform'>
 <%= render 'form' %>
