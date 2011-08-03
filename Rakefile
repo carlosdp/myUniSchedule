@@ -85,8 +85,9 @@ namespace :courses do
     courses.each do |c|
       
       str = c.name
-      
-      c.update_attributes({:number => str.scan(/(\d\d\d\d\d)/).first.first.to_i, :section => str.scan(/\d\d\d\d\d (\w+)/).first.first})
+      if str.scan(/(\d\d\d\d\d)/).count > 0
+        c.update_attributes({:number => str.scan(/(\d\d\d\d\d)/).first.first.to_i, :section => str.scan(/\d\d\d\d\d (\w+)/).first.first})
+      end
       
       i+=1
     end
@@ -97,21 +98,21 @@ namespace :courses do
     courses = Course.all
     
     seenN = Hash.new
-    seenS = Hash.new
     
     courses.each do |c|
       
-      if seenN[c.number.to_s+c.section] && c.name == c.name.upcase
+      if c.number && seenN[c.number.to_s+c.section] && c.name == c.name.upcase
         
+        puts "removing dups: #{c.name}"
         scheds = c.schedules
         scheds.each do |s|
           
-          s.courses << Course.find(seenS[c.number.to_s+c.section])
+          s.courses << Course.find(seenN[c.number.to_s+c.section])
           s.courses.delete(c)
           
         end
         
-      else
+      elsif c.number
         
         seenN[c.number.to_s+c.section] = c.id unless seenN[c.number.to_s+c.section]
         
