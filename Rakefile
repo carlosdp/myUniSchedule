@@ -151,7 +151,7 @@ namespace :courses do
   
   task :printPennCourses => :environment do
     
-    courses = School.find_by_name("University of Pennsylvania")
+    courses = School.find_by_name("University of Pennsylvania").courses
     
     courses.each do |c|
       
