@@ -54,7 +54,8 @@ class SchedulesController < ApplicationController
           flash[:error] = "Your school is not currently supported by our software. Below is a list of our currently supported schools. If your" + 
           " school is listed, please make sure it appears exactly as shown on your facebook Education profile. If not, email hmind2005@gmail.com with" +
           " your school name, a copy of the iCalendar or vCalendar output of your schedule, and instructions on how someone in your school would obtain" +
-          " that file. Thank you!"
+          " that file. Thank you! (Note: If you are in Wharton, please put 'University of Pennsylvania' in your university and 'Wharton' as your field" +
+          " of study)"
           
           @schools = School.all
           
