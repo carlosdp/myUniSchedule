@@ -313,7 +313,7 @@ class SchedulesController < ApplicationController
           end
           
           unless repl
-            courses << {:name => e.summary, :description => e.description, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
+            courses << {:name => e.summary, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
             :number => e.summary.scan(/.*(\d\d\d\d\d)\d/).first.first.to_i, :section => e.summary.scan(/.*\d\d\d\d\d(\d)/).first.first, 
             :school_id => current_user.school.id}
           end
