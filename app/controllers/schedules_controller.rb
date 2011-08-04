@@ -251,7 +251,7 @@ class SchedulesController < ApplicationController
 
     return false if sch.count > 1
     
-    if current_user.school.name == "Carnegie Mellon University"
+    if current_user.school.name == "lol"
       
       return false if sch.first.prodid.include?("Tartan")
 
@@ -280,7 +280,7 @@ class SchedulesController < ApplicationController
 
         end
       end
-    elsif current_user.school.name == "University of Pennsylvania"
+    elsif current_user.school.name == "Carnegie Mellon University"
       
       
       sch.first.events.each do |e|
@@ -314,7 +314,7 @@ class SchedulesController < ApplicationController
           
           unless repl
             courses << {:name => e.summary, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
-            :number => e.summary.scan(/.*(\d\d\d\d\d)\d/).first.first, :section => e.summary.scan(/.*\d\d\d\d\d(\d)/).first.first, 
+            :number => e.summary, :section => e.summary.scan(/.*\d\d\d\d\d(\d)/).first.first, 
             :school_id => current_user.school.id}
           end
 
