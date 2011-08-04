@@ -126,7 +126,7 @@ namespace :courses do
     
     puts "Let's do this"
     
-    courses = School.find_by_name("University of Pennsylvania").coursesg
+    courses = School.find_by_name("University of Pennsylvania").courses
     
     courses.each do |c|
       
@@ -147,7 +147,7 @@ namespace :courses do
     
     puts "Done!"
     
-  end
+  endgi
   
   desc "Add CMU School ID"
   task :addid => :environment do
