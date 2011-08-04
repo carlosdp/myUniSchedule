@@ -147,7 +147,7 @@ namespace :courses do
     
     puts "Done!"
     
-  endgi
+  end
   
   desc "Add CMU School ID"
   task :addid => :environment do
