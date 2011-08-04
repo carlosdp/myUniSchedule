@@ -164,7 +164,7 @@ namespace :courses do
   desc "Count the Schedules"
   task :countSchedules => :environment do
     
-    Schedule.count
+    puts "Schedules: #{Schedule.count}"
     
   end
   
