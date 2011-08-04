@@ -120,6 +120,33 @@ namespace :courses do
       
     end
     
+    task :fixPenn => :environment do 
+      
+      puts "Let's do this"
+      
+      courses = School.find_by_name("University of Pennsylvania")
+      
+      courses.each do |c|
+        
+        if c.number.length < 5
+          desc "Fixing #{c.name}"
+          temp = c.number
+          while(temp.length < 5)
+            
+            temp = "0" + temp
+            
+          end
+          
+          c.update_attributes({:number => temp})
+          
+        end
+        
+      end
+      
+      puts "Done!"
+      
+    end
+    
   end
   
   desc "Add CMU School ID"
