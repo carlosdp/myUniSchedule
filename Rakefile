@@ -12,7 +12,7 @@ namespace :users do
   desc "Get number of users"
   task :count => :environment do
     
-    puts "User Count: #{User.all.count}"
+    puts "User Count: #{User.count}"
     
   end
   
@@ -67,7 +67,7 @@ namespace :courses do
   desc "Get number of courses"
   task :count => :environment do
     
-    puts "Courses Count: #{Course.all.count}"
+    puts "Courses Count: #{Course.count}"
     
   end
   
@@ -158,6 +158,13 @@ namespace :courses do
       puts c.number
       
     end
+    
+  end
+  
+  desc "Count the Schedules"
+  task :countSchedules => :environment do
+    
+    Schedule.count
     
   end
   
