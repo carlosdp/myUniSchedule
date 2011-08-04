@@ -15,7 +15,7 @@
 <% end %>
 
 <% if @courses %>
-	<div id="maintext">Below is your schedule of classes with the names and facebook links to all of the students in those classes that have uploaded their schedules. Once more students in your classes upload their schedules, they will appear on this page. Make sure to check back every once in a while for new additions!</div></br>
+	<div id="maintext">Below is your schedule of classes with the names and facebook links to all of the students in those classes that have uploaded their schedules. Once more students in your classes upload their schedules, they will appear on this page. Make sure to check back every once in a while for new additions!<% if current_user.school.name == "University of Pennsylvania" %><span style="color:red">Sorry for the inconvenience, but if you are a UPENN student, please re-upload your schedule.</span><% end %></div></br>
 	</br>
 	<div id="schedulewrap">
 	<div id='calendar'><div id="schops">
@@ -49,7 +49,7 @@
 	</div>
 <% else %>
 <% if @user %>
-<div id="maintext"><%= render :partial => "intro#{current_user.school.name.delete(' ')}" %><% if current_user.school.name == "University of Pennsylvania" %><span style="color:red">Sorry for the inconvenience, but if you are a UPENN student, please re-upload your schedule.</span><% end %></div>
+<div id="maintext"><%= render :partial => "intro#{current_user.school.name.delete(' ')}" %></div>
 </br>
 <div id='upform'>
 <%= render 'form' %>
