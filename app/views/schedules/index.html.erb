@@ -49,7 +49,7 @@
 	</div>
 <% else %>
 <% if @user %>
-<div id="maintext"><%= render :partial => "intro#{current_user.school.name.delete(' ')}" %></div>
+<div id="maintext"><%= render :partial => "intro#{current_user.school.name.delete(' ')}" %><% if current_user.school.name == "University of Pennsylvania" %><span style="color:red">Sorry for the inconvenience, but if you are a UPENN student, please re-upload your schedule.</span><% end %></div>
 </br>
 <div id='upform'>
 <%= render 'form' %>

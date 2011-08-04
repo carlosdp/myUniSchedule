@@ -251,7 +251,7 @@ class SchedulesController < ApplicationController
 
     return false if sch.count > 1
     
-    if current_user.school.name == "lol"
+    if current_user.school.name == "Carnegie Mellon University"
       
       return false if sch.first.prodid.include?("Tartan")
 
@@ -280,7 +280,7 @@ class SchedulesController < ApplicationController
 
         end
       end
-    elsif current_user.school.name == "Carnegie Mellon University"
+    elsif current_user.school.name == "University of Pennsylvania"
       
       
       sch.first.events.each do |e|
