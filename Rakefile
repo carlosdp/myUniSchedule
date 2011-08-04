@@ -131,7 +131,7 @@ namespace :courses do
     courses.each do |c|
       
       if c.number.length < 5
-        desc "Fixing #{c.name}"
+        puts "Fixing #{c.name}"
         temp = c.number
         while(temp.length < 5)
           
@@ -146,6 +146,18 @@ namespace :courses do
     end
     
     puts "Done!"
+    
+  end
+  
+  task :printPennCourses => :environment do
+    
+    courses = School.find_by_name("University of Pennsylvania")
+    
+    courses.each do |c|
+      
+      puts c.number
+      
+    end
     
   end
   
