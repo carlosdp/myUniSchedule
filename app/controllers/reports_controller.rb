@@ -10,7 +10,7 @@ class ReportsController < ApplicationController
         @users.each do |record|
           csv << [record.name,
                   record.school_id,
-                  record.created_at]
+                  record.created_at.to_date]
         end
       end
 
