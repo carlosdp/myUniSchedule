@@ -3,6 +3,9 @@ Myunischedule::Application.routes.draw do
   post "o_auth/redirect"
   
   get "o_auth/logout"
+  
+  get "reports/csvusers"
+  get "reports/csvcourses"
 
   resources :schedules
   
