@@ -12,85 +12,17 @@ class SchedulesController < ApplicationController
   # GET /schedules
   # GET /schedules.xml
   def index
-    @graph = false
-    begin
-      @graph = Koala::Facebook::GraphAPI.new(session[:access_token])
-      @user = @graph.get_object('me') if session[:access_token]
-    rescue
-      session[:access_token] = nil
-    end
     
-    if session[:access_token]
-      validUser = false
+    if logged_in_fb?
       
-      if !session[:user_id]
+      #facebook graph
+      @graph = current_graph
+      @user = @graph.get_object('me')
       
-      if !User.exists?(:fbid => @user["id"])
-        if @user["education"]
-        @user["education"].each do |e|
-          
-          if e["type"] == "College" && School.exists?(:name => e["school"]["name"])
-            
-            validUser = true
-            cuser = School.find_by_name(e["school"]["name"]).users.create({:fbid => @user["id"], :name => @user["name"], :link => @user["link"]})
-            session[:user_id] = cuser[:id]
-            flash[:success] = "Congratulations! You are now linked to myUniSchedule. Follow the instructions to post your schedule!"
-            break
-            
-          end
-        end
-          
-        else
-          
-          flash[:error] = "You must allow this site to access your education in facebook!"
-          
-        end
-        
-        if !validUser
-          
-          session[:access_token] = nil
-          session[:user_id] = nil
-          @user = nil
-          flash[:error] = "Your school is not currently supported by our software. Below is a list of our currently supported schools. If your" + 
-          " school is listed, please make sure it appears exactly as shown on your facebook Education profile. If not, email hmind2005@gmail.com with" +
-          " your school name, a copy of the iCalendar or vCalendar output of your schedule, and instructions on how someone in your school would obtain" +
-          " that file. Thank you! (Note: If you are in Wharton, please put 'University of Pennsylvania' in your university and 'Wharton' as your field" +
-          " of study)"
-          
-          @schools = School.all
-          
-          
-        end
-        
-      else
-        
-        vuser = User.find_by_fbid(@user["id"])
-        session[:user_id] = vuser[:id]
-        
-      end
-      else
-        
-        if !User.exists?({:id => session[:user_id], :fbid => @user["id"]})
-          
-          session[:access_token] = nil
-          session[:user_id] = nil
-          @user = nil
-          
-        end
-        
-      end
+      #current_user's schedule
+      @schedule = current_user.schedule
       
-    else
-      
-      session[:user_id] = nil
-      
-    end
-    
-    if session[:user_id]
-      
-      luser = User.find_by_id(session[:user_id])
-      @schedu = luser.schedule
-      if @schedu
+      if @schedule
         @colors = ["#FF0000", "#162EAE", "#00AF64", "#CE0071", "#7309AA", "#FF4F00", "#323086", "#CE0071", "#250672", "#000000", "#000000", 
           "#000000", "#000000", "#000000"]
         @textColors = ["#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", 
@@ -98,7 +30,7 @@ class SchedulesController < ApplicationController
         @weekds = {"SU" => 7, "MO" => 8, "TU" => 9, "WE" => 10, "TH" => 11, "FR" => 12, "SA" => 13}
         @students = Hash.new
         @usermax = 0
-        @courses = @schedu.courses
+        @courses = @schedule.courses
         @courses.each do |c|
           tsch = Course.find_by_id(c.id).schedules
           @students[c.name] = []
@@ -110,9 +42,11 @@ class SchedulesController < ApplicationController
         end
       end
       
+    else
+      
+      @oauth = Koala::Facebook::OAuth.new("#{ENV['SITE'] ? ENV['SITE'] : 'http://localhost:3000'}/o_auth/login")
+      
     end
-    
-    @oauth = Koala::Facebook::OAuth.new("#{ENV['SITE'] ? ENV['SITE'] : 'http://localhost:3000'}/o_auth/redirect") if !session[:access_token]
 
     respond_to do |format|
       format.html # index.html.erb

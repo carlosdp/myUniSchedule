@@ -21,4 +21,28 @@ class ApplicationController < ActionController::Base
       end
       
     end
+    
+    def logged_in?
+      
+      session[:user_id] && User.exists?(:id => session[:user_id]) && session[:access_token]
+      
+    end
+    
+    def logged_in_fb?
+      
+      session[:access_token]
+      
+    end
+    
+    def current_graph
+      
+      begin
+        Koala::Facebook::GraphAPI.new(session[:access_token])
+      rescue
+        session[:access_token] = nil
+      ensure
+        nil if !session[:access_token]
+      end
+      
+    end
 end

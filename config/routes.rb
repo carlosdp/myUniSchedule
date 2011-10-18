@@ -3,6 +3,7 @@ Myunischedule::Application.routes.draw do
   post "o_auth/redirect"
   
   get "o_auth/logout"
+  get "o_auth/login"
   
   get "reports/csvusers"
   get "reports/csvcourses"

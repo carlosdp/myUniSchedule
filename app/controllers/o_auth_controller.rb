@@ -1,4 +1,76 @@
 class OAuthController < ApplicationController
+  
+  def login
+    
+    session[:access_token] = Koala::Facebook::OAuth.new("#{ENV['SITE'] ? ENV['SITE'] : 'http://localhost:3000'}/o_auth/login").get_access_token(params[:code]) if params[:code]
+    
+    begin
+      @graph = Koala::Facebook::GraphAPI.new(session[:access_token])
+      @user = @graph.get_object('me')
+    rescue
+      session[:access_token] = nil
+    ensure
+      @graph = false if !session[:access_token]
+    end
+    
+    if logged_in_fb? #if user is logged into site and into Facebook
+      validUser = false
+      
+      if User.exists?(:fbid => @user["id"]) #if the FB user is already registered, log him in
+      
+        vuser = User.find_by_fbid(@user["id"])
+        session[:user_id] = vuser[:id]
+      
+      else #if he is not registered, set him up
+        if @user["education"] #do we have education permissions?
+          @user["education"].each do |e| #REPLACE EDUCATION SORTING CODE HERE!
+        
+            if e["type"] == "College" && School.exists?(:name => e["school"]["name"])
+          
+              validUser = true
+              cuser = School.find_by_name(e["school"]["name"]).users.create({:fbid => @user["id"], :name => @user["name"], :link => @user["link"]})
+              session[:user_id] = cuser[:id]
+              flash[:success] = "Congratulations! You are now linked to myUniSchedule. Follow the instructions to post your schedule!"
+              break
+          
+            end
+          end
+        
+        else #no we don't, throw them out
+        
+          flash[:error] = "You must allow this site to access your education in facebook!"
+        
+        end
+      
+        if !validUser #if we did not establish the user was valid, throw them out
+          
+          session[:access_token] = nil
+          session[:user_id] = nil
+          @user = nil
+          flash[:error] = "Your school is not currently supported by our software. Below is a list of our currently supported schools. If your" + 
+          " school is listed, please make sure it appears exactly as shown on your facebook Education profile. If not, email hmind2005@gmail.com with" +
+          " your school name, a copy of the iCalendar or vCalendar output of your schedule, and instructions on how someone in your school would obtain" +
+          " that file. Thank you! (Note: If you are in Wharton, please put 'University of Pennsylvania' in your university and 'Wharton' as your field" +
+          " of study)"
+          
+          @schools = School.all
+          
+        end
+      
+      end
+      
+    else
+      
+      session[:access_token] = nil
+      session[:user_id] = nil
+      @user = nil
+      
+    end
+    
+    redirect_to root_path
+    
+  end
+  
   def redirect
     session[:access_token] = Koala::Facebook::OAuth.new("#{ENV['SITE'] ? ENV['SITE'] : 'http://localhost:3000'}/o_auth/redirect").get_access_token(params[:code]) if params[:code]
     
