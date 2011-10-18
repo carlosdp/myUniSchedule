@@ -71,12 +71,6 @@ class OAuthController < ApplicationController
     
   end
   
-  def redirect
-    session[:access_token] = Koala::Facebook::OAuth.new("#{ENV['SITE'] ? ENV['SITE'] : 'http://localhost:3000'}/o_auth/redirect").get_access_token(params[:code]) if params[:code]
-    
-    redirect_to root_path
-  end
-  
   def logout
     
     if session[:user_id]
