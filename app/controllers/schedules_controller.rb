@@ -45,7 +45,7 @@ class SchedulesController < ApplicationController
       @oauth = Koala::Facebook::OAuth.new("#{ENV['SITE'] ? ENV['SITE'] : 'http://localhost:3000'}/o_auth/login")
       
     end
-
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @schedules }
