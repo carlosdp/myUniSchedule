@@ -29,7 +29,6 @@ class SchedulesController < ApplicationController
           "#FFFFF", "#FFFFF", "#FFFFF"]
         @weekds = {"SU" => 7, "MO" => 8, "TU" => 9, "WE" => 10, "TH" => 11, "FR" => 12, "SA" => 13}
         @students = Hash.new
-        @usermax = 0
         @courses = @schedule.courses
         @courses.each do |c|
           tsch = Course.find_by_id(c.id).schedules
@@ -37,7 +36,6 @@ class SchedulesController < ApplicationController
           tsch.each do |u|
             @students[c.name] << u.user if u.user.id != session[:user_id]
           end
-          @usermax = @students[c.name].count if @students[c.name].count > @usermax
         
         end
       end
