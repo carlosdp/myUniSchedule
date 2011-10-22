@@ -68,7 +68,7 @@ body
 #topbar
 {
 	margin-top:0px;
-	background-color:#015C65;
+	background-color:#0A0909;
 	width:98.9%;
 	height: 20px;
 	padding:8px;
@@ -87,10 +87,28 @@ body
 	margin-right:10px;
 }
 
+#topbar #login-l
+{
+	float:right;
+	border:2px;
+	margin-right:10px;
+}
+
+#topbar #login-l img
+{
+	height:20px;
+}
+
 #topbar #user img
 {
 	height:25px;
 	width:25px;
+}
+
+#topbar #login
+{
+	float:left;
+	clear:right;
 }
 
 #topbar #login img

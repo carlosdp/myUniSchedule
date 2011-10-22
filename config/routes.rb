@@ -2,6 +2,7 @@ Myunischedule::Application.routes.draw do
   
   get "o_auth/logout"
   get "o_auth/login"
+  get "o_auth/choose"
   
   get "reports/csvusers"
   get "reports/csvcourses"

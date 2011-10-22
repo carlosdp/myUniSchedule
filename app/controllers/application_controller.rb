@@ -30,7 +30,12 @@ class ApplicationController < ActionController::Base
     
     def logged_in_fb?
       
-      session[:access_token]
+      begin
+        session[:access_token]
+        current_graph.get_object('me')
+      rescue
+        false
+      end
       
     end
     

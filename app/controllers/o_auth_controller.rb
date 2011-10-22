@@ -71,6 +71,18 @@ class OAuthController < ApplicationController
     
   end
   
+  def choose
+    
+    @schools = School.get_similar(params[:school])
+    
+    respond_to do |format|
+      
+      format.html
+      
+    end
+    
+  end
+  
   def logout
     
     if session[:user_id]
