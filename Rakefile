@@ -171,7 +171,7 @@ namespace :courses do
       
       if c.name.include?("::")
         
-        if (c.end.hour + c.end.min) - (c.start.hour + c.start.min) > 1.hours + 30.minutes
+        if (c.end.hour + c.end.min) - (c.start.hour + c.start.min) >= 120
           
           c.update_attributes!({:end => c.end - 1.hour})
           
