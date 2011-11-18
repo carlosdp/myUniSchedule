@@ -141,7 +141,7 @@ namespace :courses do
     
     courses.each do |c|
       
-      c.update_attributes!({:start=>c.start.in_time_zone("Eastern Time (US & Canada)"), :end => c.end.in_time_zone("Eastern Time (US & Canada)")})
+      c.update_attributes!({:start=>c.start - 5.hours, :end => c.end - 5.hours})
       
     end
     
