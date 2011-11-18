@@ -1,10 +1,16 @@
+<% if current_user.school.has_upload %>
 <%= form_tag '/schedules', :multipart => true do %>
 	<div id="error"><%= flash[:error] %> </div>
   <div class="field">
     iCal File:<br />
     <%= file_field :schedule, :vcal  %>
+	<% if current_user.school.has_link_upload %>
+	<p style="align:center">-OR-</p>
+	<%= text_field :schedule, :callink, :placeholder => "Paste iCal link here" %>
+	<% end %>
   </div>
   <div class="actions">
     <%= submit_tag 'Submit' %>
   </div>
+<% end %>
 <% end %>

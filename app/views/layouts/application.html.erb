@@ -27,8 +27,12 @@
 	</script>
 </head>
 <body>
-
+	<%= render :partial => 'topbar' %>
+	<div id="content">
+	<div id="uni-error"><%= flash[:error]%></div>
+	<div id="uni-success"><%= flash[:success]%></div>
 <%= yield %>
-
+<div id="footer"><div id="twit"><a href="http://twitter.com/cdiazpadron" class="twitter-follow-button" data-button="grey" data-text-color="#FFFFFF" data-link-color="#00AEFF">Follow @cdiazpadron</a>
+<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script></div><p>Copyright 2011 - <a href="http://facebook.com/cdiazpadron">Carlos Diaz-Padron</a></p></div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 class SchedulesController < ApplicationController
   require 'rubygems'
   require 'icalendar'
+  require 'open-uri'
   include Icalendar
   
   def is_logged_in_fb?
@@ -27,7 +28,7 @@ class SchedulesController < ApplicationController
           "#000000", "#000000", "#000000"]
         @textColors = ["#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", "#FFFFF", 
           "#FFFFF", "#FFFFF", "#FFFFF"]
-        @weekds = {"SU" => 7, "MO" => 8, "TU" => 9, "WE" => 10, "TH" => 11, "FR" => 12, "SA" => 13}
+        @weekds = {"0" => 7, "1" => 8, "2" => 9, "3" => 10, "4" => 11, "5" => 12, "6" => 13}
         @students = Hash.new
         @courses = @schedule.courses
         @courses.each do |c|
@@ -107,30 +108,33 @@ class SchedulesController < ApplicationController
     is_logged_in_fb?
     success = true
     
-    courselist = parseSchedule(params[:schedule])
-    
-    if courselist
-    @schedule = Schedule.new({:vcal => params[:schedule][:vcal].original_filename})
-    @schedule.user = User.find(:first, :conditions => {:id => session[:user_id]})
-    @schedule.save!
-    
-    courselist.each do |c|
+    if params[:schedule][:vcal]
       
-      if !Course.exists?({:number => c[:number], :section => c[:section], :school_id => c[:school_id]})
+      if current_user.parseCalendar(params[:schedule][:vcal].tempfile)
         
-        @schedule.courses.create(c)
+        success = true
         
       else
         
-        @schedule.courses << Course.find(:first, :conditions => {:number => c[:number], :section => c[:section], :school_id => c[:school_id]})
+        success = false
+        flash[:error] = "Invalid file!"
         
       end
       
-    end
-    else
+    elsif params[:schedule][:callink]
       
-      success = false 
-      flash[:error] = "Invalid iCal file!"
+      theLink = params[:schedule][:callink].include?(".ical") ? params[:schedule][:callink] : params[:schedule][:callink] + ".ics"
+      
+      if current_user.parseCalendar(open(theLink))
+        
+        success = true
+        
+      else
+        
+        success = false
+        flash[:error] = "Invalid file!"
+        
+      end
       
     end
 
@@ -139,7 +143,7 @@ class SchedulesController < ApplicationController
         format.html { redirect_to(root_path, :notice => 'Schedule was successfully created.') }
         format.xml  { render :xml => @schedule, :status => :created, :location => @schedule }
       else
-        format.html { render :action => "new" }
+        format.html { redirect_to root_path }
         format.xml  { render :xml => @schedule.errors, :status => :unprocessable_entity }
       end
     end
@@ -169,93 +173,6 @@ class SchedulesController < ApplicationController
       format.html { redirect_to(root_path) }
       format.xml  { head :ok }
     end
-  end
-  
-  private
-  
-  def parseSchedule(file)
-    begin
-    sch = Icalendar.parse(File.new(file[:vcal].tempfile, 'r'))
-    rescue
-      return false
-    end
-    classes = Hash.new
-    courses = []
-
-    return false if sch.count > 1
-    
-    if current_user.school.name == "Carnegie Mellon University"
-      
-      return false if sch.first.prodid.include?("Tartan")
-
-      sch.first.events.each do |e|
-
-        weekdys = []
-
-        if !classes[e.summary]
-          classes[e.summary] = true
-          e.recurrence_rules.each do |r|
-
-            weekdy = r.parse_weekday_list("BYDAY", r.orig_value)
-            weekdy.each do |w|
-
-              weekdys << w.to_s.sub(",","")
-
-            end
-
-          end
-        
-          return false if e.summary != e.summary.upcase
-
-          courses << {:name => e.summary, :description => e.description, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
-          :number => e.summary.scan(/(\d\d\d\d\d)/).first.first, :section => e.summary.scan(/\d\d\d\d\d (\w+)/).first.first, 
-          :school_id => current_user.school.id}
-
-        end
-      end
-    elsif current_user.school.name == "University of Pennsylvania"
-      
-      
-      sch.first.events.each do |e|
-
-        weekdys = []
-
-        
-          e.recurrence_rules.each do |r|
-
-            weekdy = r.parse_weekday_list("BYDAY", r.orig_value)
-            weekdy.each do |w|
-
-              weekdys << w.to_s.sub(",","")
-
-            end
-          end
-          
-          repl = false
-          
-          courses.each do |c|
-            
-            if c[:name] == e.summary
-              
-              c[:weekdays] = c[:weekdays] + "," + weekdys.compact.to_s
-              repl = true
-              logger.debug "Found duplicate #{c[:summary]}"
-              
-            end
-            
-          end
-          
-          unless repl
-            courses << {:name => e.summary, :weekdays => weekdys.compact.to_s, :start => e.dtstart, :end => e.dtend,
-            :number => e.summary, :section => e.summary.scan(/.*\d\d\d\d\d(\d)/).first.first, 
-            :school_id => current_user.school.id}
-          end
-
-      end
-      
-    end
-    
-    return courses
   end
   
 end

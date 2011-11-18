@@ -1,8 +1,3 @@
-<%= render :partial => 'topbar' %>
-<div id="content">
-<div id="uni-error"><%= flash[:error]%></div>
-<div id="uni-success"><%= flash[:success]%></div>
-
 <% if @schools %>
 <ol style="width:50%;margin: 0 auto;">
 	<% @schools.each do |s| %>
@@ -18,7 +13,7 @@
 	</br>
 	<div id="schedulewrap">
 	<div id='calendar'><div id="schops">
-	    <td><%= link_to 'Delete my Schedule', @schedu, :confirm => 'Are you sure?', :method => :delete %></td>
+	    <td><%= link_to 'Delete my Schedule', @schedule, :confirm => 'Are you sure?', :method => :delete %></td>
 	</div></div>
 	<div id="accordion">
 		<% e = 0 %>
@@ -57,9 +52,7 @@
 
 <div id="maintext">Welcome to myUniSchedule! This site allows students to upload their class schedules and link with others that are in their classes! Click the facebook button above to login with your facebook. You must have a supported school in your facebook education profile. If you have any errors or gltiches (or suggestions), email me at hmind2005@gmail.com or follow me on twitter below.</div>
 </br>
-<%= link_to image_tag('introim.png', :style => "width:100%;"), @oauth.url_for_oauth_code(:permissions => 'user_education_history'), :style=> "margin-left:auto;margin-right:auto;" %>
+<%= link_to image_tag('musmain1.png'), @oauth.url_for_oauth_code(:permissions => 'user_education_history'), :style=> "margin-left:auto;margin-right:auto;" %>
 <% end %>
 <% end %>
 </div>
-<div id="footer"><div id="twit"><a href="http://twitter.com/cdiazpadron" class="twitter-follow-button" data-button="grey" data-text-color="#FFFFFF" data-link-color="#00AEFF">Follow @cdiazpadron</a>
-<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script></div><p>Copyright 2011 - <a href="http://facebook.com/cdiazpadron">Carlos Diaz-Padron</a></p></div>

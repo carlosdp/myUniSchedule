@@ -15,7 +15,7 @@ $(document).ready(function() {
 			<% minTime = c.start.hour-1 if c.start.hour < minTime %>
 			<% maxTime = c.end.hour+2 if c.end.hour > maxTime %>
 			<% c.weekdays.delete("[").delete("]").delete('"').delete(" ").split(",").each do |w| %>
-			<% kends = "true" if w == "SU" || w == "SA" %>
+			<% kends = "true" if w == 0 || w == 7 %>
 			{
 				title: '<%= c.name %>',
 				start: new Date(2011, 7, <%= @weekds[w] %>, <%= c.start.hour %>, <%= c.start.min %>),

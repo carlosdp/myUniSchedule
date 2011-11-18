@@ -60,6 +60,19 @@ namespace :schools do
     
   end
   
+  desc "Set upload vars"
+  task :uploadvars, [:name, :upload, :link] => :environment do |t, args|
+    
+    sch = School.find(:first, :conditions => {:name => args[:name]})
+    
+    puts "Updating #{sch.name} : #{sch.id}"
+    
+    sch.update_attributes!({:has_upload => args[:upload], :has_link_upload => args[:link]})
+    
+    puts "Updated!"
+    
+  end
+  
 end
 
 namespace :courses do

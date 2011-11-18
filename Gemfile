@@ -11,6 +11,7 @@ gem 'ruby-hmac', :require => 'hmac-sha1'
 gem 'koala'
 gem 'icalendar'
 gem 'jquery-rails'
+gem 'ri_cal'
 
 # Use unicorn as the web server
 # gem 'unicorn'
