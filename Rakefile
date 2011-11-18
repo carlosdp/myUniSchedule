@@ -163,6 +163,26 @@ namespace :courses do
     
   end
   
+  task :quick1 => :environment do
+    
+    courses = Course.all
+    
+    courses.each do |c|
+      
+      if c.name.include?("::")
+        
+        if c.end-c.start > 1.hours + 30.minutes
+          
+          c.update_attributes!({:end => c.end - 1.hour})
+          
+        end
+        
+      end
+      
+    end
+    
+  end
+  
   task :fixPenn => :environment do 
     
     puts "Let's do this"
