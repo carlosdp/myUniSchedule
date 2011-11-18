@@ -149,7 +149,7 @@ namespace :courses do
   
   task :fixtz => :environment do
     
-    course = Course.all
+    courses = Course.all
     
     courses.each do |c|
       
