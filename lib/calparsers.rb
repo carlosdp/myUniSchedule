@@ -24,7 +24,18 @@ module CalParsers
       end
       
       courseNumber = e.summary.delete("-").scan(/(\d\d\d\d\d)/).first.first
-      courseSection = e.summary.include?("Lec") ? e.summary[/\A"(.*)"\z/m,1].last.upcase : e.summary.delete("-").scan(/\d\d\d\d\d (\w+)/).first.first
+      courseSection = ""
+      
+      if e.summary.include?("Lec")
+        courseSection = e.summary[/\A"(.*)"\z/m,1].last.upcase
+        
+        if !(courseSection =~ /^[-+]?[0-9]+$/)
+          courseSection = "1"
+        end
+        
+      else
+        courseSection = e.summary.delete("-").scan(/\d\d\d\d\d (\w+)/).first.first
+      end
       
       if courses.select{|x| x[:number] == courseNumber && x[:section] == courseSection}.count == 0
         
@@ -32,7 +43,7 @@ module CalParsers
         name = cal.prodid.include?("ScheduleMan") ? e.description[/\A"(.*)"\z/m,1] + " " + courseSection.to_s : e.summary
         dtend = e.dtend ? e.dtend : e.duration_property.add_to_date_time_value(dtstart)
         courses << {:name => name, :description => e.description, :weekdays => days.to_s, :start => dtstart, 
-          :end => dtend, :number => courseNumber, :section => "#{courseSection}", :school_id => self.school.id}
+          :end => dtend, :number => courseNumber, :section => courseSection, :school_id => self.school.id}
         
       end
       
