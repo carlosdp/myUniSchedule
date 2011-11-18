@@ -28,9 +28,10 @@ module CalParsers
       
       if courses.select{|x| x[:number] == courseNumber && x[:section] == courseSection}.count == 0
         
+        dtstart = cal.prodid.include?("ScheduleMan") ? e.dtstart - 5.hours : e.dtstart
         name = cal.prodid.include?("ScheduleMan") ? e.description[/\A"(.*)"\z/m,1] + " " + courseSection.to_s : e.summary
-        dtend = e.dtend ? e.dtend : e.duration_property.add_to_date_time_value(e.dtstart - 5.hours)
-        courses << {:name => name, :description => e.description, :weekdays => days.to_s, :start => e.dtstart - 5.hours, 
+        dtend = e.dtend ? e.dtend : e.duration_property.add_to_date_time_value(dtstart)
+        courses << {:name => name, :description => e.description, :weekdays => days.to_s, :start => dtstart, 
           :end => dtend, :number => courseNumber, :section => courseSection, :school_id => self.school.id}
         
       end

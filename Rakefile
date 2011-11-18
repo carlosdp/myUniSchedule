@@ -147,6 +147,22 @@ namespace :courses do
     
   end
   
+  task :fixtz => :environment do
+    
+    course = Course.all
+    
+    courses.each do |c|
+      
+      if c.name == c.name.upcase
+        
+        c.update_attributes!({:start => c.start + 5.hours})
+        
+      end
+      
+    end
+    
+  end
+  
   task :fixPenn => :environment do 
     
     puts "Let's do this"
