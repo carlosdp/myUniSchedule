@@ -24,7 +24,8 @@
 				<% @students[c.name].each do |s| %>
 				<tr>
 					<td>
-					<a href="<%= s.link %>" target="_blank" style="color:white;"><%= s.name %></a>
+					<img src="http://graph.facebook.com/<%= s.fbid %>/picture" style="height:40px;width:40px;float:left;">
+					<a href="<%= s.link %>" target="_blank" style="color:white;float:right;margin-top:10px;"><%= s.name %></a>
 					</td>
 				</tr>
 				<% end %>
@@ -52,7 +53,7 @@
 
 <div id="maintext">Welcome to myUniSchedule! This site allows students to upload their class schedules and link with others that are in their classes! Click the facebook button above to login with your facebook. You must have a supported school in your facebook education profile. If you have any errors or gltiches (or suggestions), email me at hmind2005@gmail.com or follow me on twitter below.</div>
 </br>
-<%= link_to image_tag('musmain1.png'), @oauth.url_for_oauth_code(:permissions => 'user_education_history'), :style=> "margin-left:auto;margin-right:auto;" %>
+<%= link_to image_tag('introim.png'), @oauth.url_for_oauth_code(:permissions => 'user_education_history'), :style=> "margin-left:auto;margin-right:auto;" %>
 <% end %>
 <% end %>
 </div>
