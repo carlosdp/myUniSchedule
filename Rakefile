@@ -135,6 +135,18 @@ namespace :courses do
     
   end
   
+  task :fixtimes => :environment do
+    
+    courses = Course.all
+    
+    courses.each do |c|
+      
+      c.update_attributes!({:start=>c.start.in_time_zone("Eastern Time (US & Canada)"), :end => c.end.in_time_zone("Eastern Time (US & Canada)")})
+      
+    end
+    
+  end
+  
   task :fixPenn => :environment do 
     
     puts "Let's do this"
